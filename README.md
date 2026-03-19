@@ -63,6 +63,7 @@ func main() {
 - `channels_ec_order_shop.go`: 订单管理查询类接口实现
 - `channels_ec_funds_shop.go`: 资金管理查询类接口实现
 - `channels_ec_compass_shop.go`: 电商罗盘查询类接口实现
+- `message_push_crypto.go`: 消息推送加解密处理
 
 ## 接口列表
 
@@ -105,6 +106,173 @@ func main() {
 | `GetCompassShopProductData` | `/channels/ec/compass/shop/product/data/get` | 获取商品详细信息 |
 | `GetCompassShopProductList` | `/channels/ec/compass/shop/product/list/get` | 获取商品列表 |
 | `GetCompassShopSaleProfileData` | `/channels/ec/compass/shop/sale/profile/data/get` | 获取店铺人群数据 |
+
+## 消息推送加解密工具使用示例
+
+### 1. 服务器验证（首次配置时）
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func verifyHandler(w http.ResponseWriter, r *http.Request) {
+	// 获取 URL 参数
+	signature := r.URL.Query().Get("signature")
+	timestamp := r.URL.Query().Get("timestamp")
+	nonce := r.URL.Query().Get("nonce")
+	echostr := r.URL.Query().Get("echostr")
+
+	// 创建加解密处理器
+	crypto, err := wxshop.NewMessagePushCrypto(
+		"your_encoding_aes_key",  // 微信配置的 EncodingAESKey
+		"your_token",             // 微信配置的 Token
+		"your_appid",             // 微信小店 AppID
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 验证签名
+	err = crypto.VerifySignature(signature, timestamp, nonce, echostr)
+	if err != nil {
+		http.Error(w, "签名验证失败", http.StatusForbidden)
+		return
+	}
+
+	// 原样返回 echostr
+	w.Write([]byte(echostr))
+}
+```
+
+### 2. 接收并解密消息（安全模式）
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+)
+
+type ReceiveMessage struct {
+	ToUserName string `json:"ToUserName"`
+	Encrypt    string `json:"Encrypt"`
+}
+
+func messageHandler(w http.ResponseWriter, r *http.Request) {
+	// 获取 URL 参数
+	msgSignature := r.URL.Query().Get("msg_signature")
+	timestamp := r.URL.Query().Get("timestamp")
+	nonce := r.URL.Query().Get("nonce")
+
+	// 读取请求体
+	bodyBytes, _ := io.ReadAll(r.Body)
+	var msg ReceiveMessage
+	json.Unmarshal(bodyBytes, &msg)
+
+	// 创建加解密处理器
+	crypto, _ := wxshop.NewMessagePushCrypto(
+		"your_encoding_aes_key",
+		"your_token",
+		"your_appid",
+	)
+
+	// 一站式验证并解密消息
+	decryptedMsg, err := wxshop.VerifyAndDecryptMessage(
+		crypto,
+		msgSignature,
+		timestamp,
+		nonce,
+		msg.Encrypt,
+	)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusForbidden)
+		return
+	}
+
+	fmt.Printf("解密后的消息：%s\n", decryptedMsg)
+
+	// 回复成功（可以回复 success 或空串，也可以回复加密消息）
+	w.Write([]byte("success"))
+}
+```
+
+### 3. 构建加密响应包（需要回复消息时）
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"net/http"
+)
+
+func encryptedResponseHandler(w http.ResponseWriter, r *http.Request) {
+	crypto, _ := wxshop.NewMessagePushCrypto(
+		"your_encoding_aes_key",
+		"your_token",
+		"your_appid",
+	)
+
+	// 要回复的明文消息
+	responseMsg := `{"demo_resp":"good luck"}`
+
+	// 构建加密响应包
+	response, err := crypto.BuildEncryptedResponse(responseMsg)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 返回 JSON 格式的响应包
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+```
+
+### 核心 API 说明
+
+#### 创建加解密处理器
+```go
+crypto, err := wxshop.NewMessagePushCrypto(encodingAESKey, token, appID)
+```
+
+#### 验证服务器配置签名（GET 请求）
+```go
+err := crypto.VerifySignature(signature, timestamp, nonce, echostr)
+```
+
+#### 验证消息体签名（POST 请求，安全模式）
+```go
+err := crypto.VerifyMessageSignature(msgSignature, timestamp, nonce, encrypt)
+```
+
+#### 解密消息
+```go
+msg, err := crypto.DecryptMessage(encrypt)
+```
+
+#### 加密消息
+```go
+encrypted, err := crypto.EncryptMessage(msg)
+```
+
+#### 一站式验证并解密（推荐）
+```go
+msg, err := wxshop.VerifyAndDecryptMessage(crypto, msgSignature, timestamp, nonce, encrypt)
+```
+
+#### 构建加密响应包（推荐）
+```go
+response, err := crypto.BuildEncryptedResponse(responseMsg)
+```
 
 ## License
 
