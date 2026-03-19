@@ -1,0 +1,90 @@
+# wxshop-go-sdk
+
+微信小店 Go 语言 SDK。
+
+## 功能
+
+提供微信小店 API 的 Go 语言封装，方便开发者快速接入。
+
+## 快速开始
+
+### 安装
+
+```bash
+go get github.com/ealink1/wxshop_go_sdk
+go get -u github.com/ealink1/wxshop_go_sdk@latest
+```
+
+> 注意：请根据实际仓库地址调整上述 import 路径。
+
+### 使用示例
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	wxshop "github.com/ealink1/wxshop_go_sdk"
+)
+
+func main() {
+	appID := "your_app_id"
+	appSecret := "your_app_secret"
+	client := wxshop.NewClient(appID, appSecret)
+	ctx := context.Background()
+
+	tokenResult, err := client.GetStableAccessTokenDirect(ctx, true)
+	if err != nil {
+		log.Fatalf("获取 stable access_token 失败：%v", err)
+	}
+
+	client.SetAccessToken(tokenResult.AccessToken)
+	quotaResult, err := client.GetApiQuota(ctx, &wxshop.GetApiQuotaRequest{
+		CGIPath: wxshop.AccessStableTokenApi,
+	})
+	if err != nil {
+		log.Fatalf("查询 API 调用额度失败：%v", err)
+	}
+
+	fmt.Printf("access_token=%s\n", tokenResult.AccessToken)
+	fmt.Printf("daily_limit=%d used=%d remain=%d\n", quotaResult.Quota.DailyLimit, quotaResult.Quota.Used, quotaResult.Quota.Remain)
+}
+```
+
+## 目录结构
+
+- `wxshop.go`: 客户端结构定义及环境配置
+- `cgi_bin_token.go`: 获取 access_token 接口实现
+- `cgi_bin_stable_token.go`: 获取稳定版 access_token 接口实现
+- `cgi_bin_openapi_quota_get.go`: 查询 API 调用额度接口实现
+- `cgi_bin_openapi_quota_clear.go`: 重置指定 API 调用次数接口实现
+- `cgi_bin_clear_quota.go`: 使用 access_token 重置每日 API 调用次数
+- `cgi_bin_clear_quota_by_appsecret.go`: 使用 AppSecret 重置每日 API 调用次数
+- `cgi_bin_callback_check.go`: 网络通信检测接口实现
+- `cgi_bin_openapi_rid_get.go`: 查询 rid 信息接口实现
+- `channels_ec_basics_shop.go`: 店铺管理接口实现
+- `af_test.go`: 接口测试用例
+
+## 接口列表
+
+| 方法名 | 接口路径 | 说明 |
+| --- | --- | --- |
+| `GetAccessTokenDirect` | `/cgi-bin/token` | 直接获取 access_token |
+| `GetStableAccessTokenDirect` | `/cgi-bin/stable_token` | 获取稳定版接口调用凭据 |
+| `GetApiQuota` | `/cgi-bin/openapi/quota/get` | 查询指定 API 的调用额度与频率限制 |
+| `ClearApiQuota` | `/cgi-bin/openapi/quota/clear` | 重置指定 API 的每日调用次数 |
+| `ClearQuota` | `/cgi-bin/clear_quota` | 使用 access_token 重置每日 API 调用次数 |
+| `ClearQuotaByAppSecret` | `/cgi-bin/clear_quota/v2` | 使用 AppSecret 重置每日 API 调用次数 |
+| `CallbackCheck` | `/cgi-bin/callback/check` | 对回调地址执行域名解析和 ping 检测 |
+| `GetRidInfo` | `/cgi-bin/openapi/rid/get` | 查询接口报错返回 rid 的详细信息 |
+| `GetShopBasicInfo` | `/channels/ec/basics/info/get` | 获取店铺基本信息 |
+| `GetShopH5URL` | `/channels/ec/basics/shop/h5url/get` | 获取店铺 H5 链接 |
+| `GetShopQRCode` | `/channels/ec/basics/shop/qrcode/get` | 获取店铺二维码 |
+| `GetShopTagLink` | `/channels/ec/basics/shop/taglink/get` | 获取店铺微信口令 |
+
+## License
+
+MIT
