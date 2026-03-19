@@ -85,12 +85,6 @@ func (c *Client) GetStableAccessTokenDirect(ctx context.Context, forceRefresh bo
 	return &result, nil
 }
 
-// AccTokenRes access_token 接口响应
-type AccTokenRes struct {
-	AccessToken string `json:"access_token"`
-	ExpiresIn   int    `json:"expires_in"`
-}
-
 // ============================================================================
 // API 调用额度管理相关接口
 // ============================================================================
@@ -304,100 +298,6 @@ func (c *Client) ClearQuotaByAppSecret(ctx context.Context, reqData *ClearQuotaB
 	return &result, nil
 }
 
-// GetApiQuotaRequest 查询 API 调用额度请求参数
-type GetApiQuotaRequest struct {
-	// CGIPath 待查询接口路径，示例：/cgi-bin/message/custom/send
-	CGIPath string
-}
-
-// GetApiQuotaBody 查询 API 调用额度请求体
-type GetApiQuotaBody struct {
-	// CGIPath 待查询接口路径
-	CGIPath string `json:"cgi_path"`
-}
-
-// GetApiQuotaResponse 查询 API 调用额度响应
-type GetApiQuotaResponse struct {
-	// ErrCode 返回码
-	ErrCode int `json:"errcode"`
-	// ErrMsg 错误信息
-	ErrMsg string `json:"errmsg"`
-	// Quota 当日调用额度详情
-	Quota GetApiQuotaQuota `json:"quota"`
-	// RateLimit 普通调用频率限制
-	RateLimit GetApiQuotaRateLimit `json:"rate_limit"`
-	// ComponentRateLimit 代调用频率限制
-	ComponentRateLimit GetApiQuotaRateLimit `json:"component_rate_limit"`
-}
-
-// GetApiQuotaQuota 当日调用额度详情
-type GetApiQuotaQuota struct {
-	// DailyLimit 当日可调用总次数
-	DailyLimit int `json:"daily_limit"`
-	// Used 当日已调用次数
-	Used int `json:"used"`
-	// Remain 当日剩余调用次数
-	Remain int `json:"remain"`
-}
-
-// GetApiQuotaRateLimit 调用频率限制
-type GetApiQuotaRateLimit struct {
-	// CallCount 周期内可调用次数
-	CallCount int `json:"call_count"`
-	// RefreshSecond 刷新周期，单位秒
-	RefreshSecond int `json:"refresh_second"`
-}
-
-// ClearApiQuotaRequest 重置 API 调用次数请求参数
-type ClearApiQuotaRequest struct {
-	CGIPath string
-}
-
-// ClearApiQuotaBody 重置 API 调用次数请求体
-type ClearApiQuotaBody struct {
-	CGIPath string `json:"cgi_path"`
-}
-
-// ClearApiQuotaResponse 重置 API 调用次数响应
-type ClearApiQuotaResponse struct {
-	ErrCode int    `json:"errcode"`
-	ErrMsg  string `json:"errmsg"`
-}
-
-// ClearQuotaRequest 重置每日 API 调用次数请求参数
-type ClearQuotaRequest struct {
-	AppID string
-}
-
-// clearQuotaBody 重置每日 API 调用次数请求体
-type clearQuotaBody struct {
-	AppID string `json:"appid"`
-}
-
-// ClearQuotaResponse 重置每日 API 调用次数响应
-type ClearQuotaResponse struct {
-	ErrCode int    `json:"errcode"`
-	ErrMsg  string `json:"errmsg"`
-}
-
-// ClearQuotaByAppSecretRequest 使用 AppSecret 重置每日 API 调用次数请求参数
-type ClearQuotaByAppSecretRequest struct {
-	AppID     string
-	AppSecret string
-}
-
-// clearQuotaByAppSecretBody 使用 AppSecret 重置每日 API 调用次数请求体
-type clearQuotaByAppSecretBody struct {
-	AppID     string `json:"appid"`
-	AppSecret string `json:"appsecret"`
-}
-
-// ClearQuotaByAppSecretResponse 使用 AppSecret 重置每日 API 调用次数响应
-type ClearQuotaByAppSecretResponse struct {
-	ErrCode int    `json:"errcode"`
-	ErrMsg  string `json:"errmsg"`
-}
-
 // ============================================================================
 // RID 管理相关接口
 // ============================================================================
@@ -449,33 +349,6 @@ func (c *Client) GetRidInfo(ctx context.Context, reqData *GetRidInfoRequest) (*G
 	}
 
 	return &result, nil
-}
-
-// GetRidInfoRequest 查询 rid 信息请求参数
-type GetRidInfoRequest struct {
-	RID string
-}
-
-// getRidInfoBody 查询 rid 信息请求体
-type getRidInfoBody struct {
-	RID string `json:"rid"`
-}
-
-// GetRidInfoResponse 查询 rid 信息响应
-type GetRidInfoResponse struct {
-	ErrCode int               `json:"errcode"`
-	ErrMsg  string            `json:"errmsg"`
-	Request GetRidInfoPayload `json:"request"`
-}
-
-// GetRidInfoPayload rid 信息详情
-type GetRidInfoPayload struct {
-	InvokeTime   int64  `json:"invoke_time"`
-	CostInMS     int64  `json:"cost_in_ms"`
-	RequestURL   string `json:"request_url"`
-	RequestBody  string `json:"request_body"`
-	ResponseBody string `json:"response_body"`
-	ClientIP     string `json:"client_ip"`
 }
 
 // ============================================================================
@@ -549,35 +422,154 @@ func (c *Client) CallbackCheck(ctx context.Context, reqData *CallbackCheckReques
 	return &result, nil
 }
 
+// ============================================================================
+// 结构体定义
+// ============================================================================
+
+// AccTokenRes access_token 接口响应
+type AccTokenRes struct {
+	AccessToken string `json:"access_token"` // 接口调用凭证
+	ExpiresIn   int    `json:"expires_in"`   // 凭证有效期，单位秒
+}
+
+// GetApiQuotaRequest 查询 API 调用额度请求参数
+type GetApiQuotaRequest struct {
+	CGIPath string // 待查询接口路径
+}
+
+// GetApiQuotaBody 查询 API 调用额度请求体
+type GetApiQuotaBody struct {
+	CGIPath string `json:"cgi_path"` // 待查询接口路径
+}
+
+// GetApiQuotaResponse 查询 API 调用额度响应
+type GetApiQuotaResponse struct {
+	ErrCode            int                 `json:"errcode"`              // 返回码
+	ErrMsg             string              `json:"errmsg"`               // 错误信息
+	Quota              GetApiQuotaQuota    `json:"quota"`                // 当日调用额度详情
+	RateLimit          GetApiQuotaRateLimit `json:"rate_limit"`          // 普通调用频率限制
+	ComponentRateLimit GetApiQuotaRateLimit `json:"component_rate_limit"` // 代调用频率限制
+}
+
+// GetApiQuotaQuota 当日调用额度详情
+type GetApiQuotaQuota struct {
+	DailyLimit int `json:"daily_limit"` // 当日可调用总次数
+	Used       int `json:"used"`        // 当日已调用次数
+	Remain     int `json:"remain"`      // 当日剩余调用次数
+}
+
+// GetApiQuotaRateLimit 调用频率限制
+type GetApiQuotaRateLimit struct {
+	CallCount     int `json:"call_count"`     // 周期内可调用次数
+	RefreshSecond int `json:"refresh_second"` // 刷新周期，单位秒
+}
+
+// ClearApiQuotaRequest 重置 API 调用次数请求参数
+type ClearApiQuotaRequest struct {
+	CGIPath string // 待重置接口路径
+}
+
+// ClearApiQuotaBody 重置 API 调用次数请求体
+type ClearApiQuotaBody struct {
+	CGIPath string `json:"cgi_path"` // 待重置接口路径
+}
+
+// ClearApiQuotaResponse 重置 API 调用次数响应
+type ClearApiQuotaResponse struct {
+	ErrCode int    `json:"errcode"` // 错误码
+	ErrMsg  string `json:"errmsg"`  // 错误信息
+}
+
+// ClearQuotaRequest 重置每日 API 调用次数请求参数
+type ClearQuotaRequest struct {
+	AppID string // 待重置账号 AppID
+}
+
+// clearQuotaBody 重置每日 API 调用次数请求体
+type clearQuotaBody struct {
+	AppID string `json:"appid"` // 待重置账号 AppID
+}
+
+// ClearQuotaResponse 重置每日 API 调用次数响应
+type ClearQuotaResponse struct {
+	ErrCode int    `json:"errcode"` // 错误码
+	ErrMsg  string `json:"errmsg"`  // 错误信息
+}
+
+// ClearQuotaByAppSecretRequest 使用 AppSecret 重置每日 API 调用次数请求参数
+type ClearQuotaByAppSecretRequest struct {
+	AppID     string // 待重置账号 AppID
+	AppSecret string // 应用密钥
+}
+
+// clearQuotaByAppSecretBody 使用 AppSecret 重置每日 API 调用次数请求体
+type clearQuotaByAppSecretBody struct {
+	AppID     string `json:"appid"`     // 待重置账号 AppID
+	AppSecret string `json:"appsecret"` // 应用密钥
+}
+
+// ClearQuotaByAppSecretResponse 使用 AppSecret 重置每日 API 调用次数响应
+type ClearQuotaByAppSecretResponse struct {
+	ErrCode int    `json:"errcode"` // 错误码
+	ErrMsg  string `json:"errmsg"`  // 错误信息
+}
+
+// GetRidInfoRequest 查询 rid 信息请求参数
+type GetRidInfoRequest struct {
+	RID string // 请求链路 ID
+}
+
+// getRidInfoBody 查询 rid 信息请求体
+type getRidInfoBody struct {
+	RID string `json:"rid"` // 请求链路 ID
+}
+
+// GetRidInfoResponse 查询 rid 信息响应
+type GetRidInfoResponse struct {
+	ErrCode int               `json:"errcode"` // 错误码
+	ErrMsg  string            `json:"errmsg"`  // 错误信息
+	Request GetRidInfoPayload `json:"request"` // 请求详情
+}
+
+// GetRidInfoPayload rid 信息详情
+type GetRidInfoPayload struct {
+	InvokeTime   int64  `json:"invoke_time"`   // 发起请求时间戳
+	CostInMS     int64  `json:"cost_in_ms"`    // 请求耗时，单位毫秒
+	RequestURL   string `json:"request_url"`   // 请求 URL
+	RequestBody  string `json:"request_body"`  // 请求体
+	ResponseBody string `json:"response_body"` // 响应体
+	ClientIP     string `json:"client_ip"`     // 客户端 IP
+}
+
 // CallbackCheckRequest 网络通信检测请求参数
 type CallbackCheckRequest struct {
-	Action        string
-	CheckOperator string
+	Action        string // 检测动作
+	CheckOperator string // 检测运营商
 }
 
 // callbackCheckBody 网络通信检测请求体
 type callbackCheckBody struct {
-	Action        string `json:"action"`
-	CheckOperator string `json:"check_operator"`
+	Action        string `json:"action"`         // 检测动作
+	CheckOperator string `json:"check_operator"` // 检测运营商
 }
 
 // CallbackCheckResponse 网络通信检测响应
 type CallbackCheckResponse struct {
-	ErrCode int                     `json:"errcode"`
-	ErrMsg  string                  `json:"errmsg"`
-	DNS     []CallbackCheckDNSItem  `json:"dns"`
-	Ping    []CallbackCheckPingItem `json:"ping"`
+	ErrCode int                     `json:"errcode"` // 错误码
+	ErrMsg  string                  `json:"errmsg"`  // 错误信息
+	DNS     []CallbackCheckDNSItem  `json:"dns"`     // DNS 检测结果
+	Ping    []CallbackCheckPingItem `json:"ping"`    // Ping 检测结果
 }
 
 // CallbackCheckDNSItem DNS 检测结果
 type CallbackCheckDNSItem struct {
-	IP           string `json:"ip"`
-	RealOperator string `json:"real_operator"`
+	IP           string `json:"ip"`            // 解析出的 IP
+	RealOperator string `json:"real_operator"` // IP 对应运营商
 }
 
 // CallbackCheckPingItem Ping 检测结果
 type CallbackCheckPingItem struct {
-	IP           string `json:"ip"`
-	FromOperator string `json:"from_operator"`
-	PackageLoss  string `json:"package_loss"`
+	IP           string `json:"ip"`            // ping 目标 IP
+	FromOperator string `json:"from_operator"` // 源运营商
+	PackageLoss  string `json:"package_loss"`  // 丢包率
 }

@@ -57,16 +57,9 @@ func main() {
 ## 目录结构
 
 - `wxshop.go`: 客户端结构定义及环境配置
-- `cgi_bin_token.go`: 获取 access_token 接口实现
-- `cgi_bin_stable_token.go`: 获取稳定版 access_token 接口实现
-- `cgi_bin_openapi_quota_get.go`: 查询 API 调用额度接口实现
-- `cgi_bin_openapi_quota_clear.go`: 重置指定 API 调用次数接口实现
-- `cgi_bin_clear_quota.go`: 使用 access_token 重置每日 API 调用次数
-- `cgi_bin_clear_quota_by_appsecret.go`: 使用 AppSecret 重置每日 API 调用次数
-- `cgi_bin_callback_check.go`: 网络通信检测接口实现
-- `cgi_bin_openapi_rid_get.go`: 查询 rid 信息接口实现
+- `cgi_bin_common.go`: 通用接口实现（token、quota、rid、callback 等）
 - `channels_ec_basics_shop.go`: 店铺管理接口实现
-- `af_test.go`: 接口测试用例
+- `channels_ec_product_shop.go`: 商品管理查询类接口实现
 
 ## 接口列表
 
@@ -84,6 +77,13 @@ func main() {
 | `GetShopH5URL` | `/channels/ec/basics/shop/h5url/get` | 获取店铺 H5 链接 |
 | `GetShopQRCode` | `/channels/ec/basics/shop/qrcode/get` | 获取店铺二维码 |
 | `GetShopTagLink` | `/channels/ec/basics/shop/taglink/get` | 获取店铺微信口令 |
+| `GetProduct` | `/channels/ec/product/get` | 获取商品详情（线上/草稿） |
+| `GetProductList` | `/channels/ec/product/list/get` | 获取商品列表 |
+| `GetProductH5URL` | `/channels/ec/product/h5url/get` | 获取商品 H5 短链 |
+| `GetProductTagLink` | `/channels/ec/product/taglink/get` | 获取商品微信口令 |
+| `GetProductQRCode` | `/channels/ec/product/qrcode/get` | 获取商品二维码 |
+| `GetProductScheme` | `/channels/ec/product/scheme/get` | 获取商品移动应用跳转 scheme 码 |
+| `GetProductAuditStrategy` | `/channels/ec/product/auditstrategy/get` | 获取商品上架策略 |
 
 ## License
 
