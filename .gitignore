@@ -30,6 +30,7 @@ go.work
 .DS_Store
 .qoder/
 .trae/
+.lingma/
 # Debugging
 debug
 afr_test.go
