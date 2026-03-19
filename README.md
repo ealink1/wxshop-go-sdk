@@ -60,6 +60,7 @@ func main() {
 - `cgi_bin_common.go`: 通用接口实现（token、quota、rid、callback 等）
 - `channels_ec_basics_shop.go`: 店铺管理接口实现
 - `channels_ec_product_shop.go`: 商品管理查询类接口实现
+- `channels_ec_order_shop.go`: 订单管理查询类接口实现
 
 ## 接口列表
 
@@ -84,6 +85,9 @@ func main() {
 | `GetProductQRCode` | `/channels/ec/product/qrcode/get` | 获取商品二维码 |
 | `GetProductScheme` | `/channels/ec/product/scheme/get` | 获取商品移动应用跳转 scheme 码 |
 | `GetProductAuditStrategy` | `/channels/ec/product/auditstrategy/get` | 获取商品上架策略 |
+| `GetOrderList` | `/channels/ec/order/list/get` | 获取订单列表 |
+| `GetOrder` | `/channels/ec/order/get` | 获取订单详情 |
+| `SearchOrder` | `/channels/ec/order/search` | 搜索订单 |
 
 ## License
 

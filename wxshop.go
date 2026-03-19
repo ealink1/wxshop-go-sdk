@@ -60,4 +60,7 @@ const (
 	ProductQRCodeGetApi        = "/channels/ec/product/qrcode/get"        // 获取商品二维码
 	ProductSchemeGetApi        = "/channels/ec/product/scheme/get"        // 获取商品移动应用跳转 scheme 码
 	ProductAuditStrategyGetApi = "/channels/ec/product/auditstrategy/get" // 获取商品上架策略
+	OrderListGetApi            = "/channels/ec/order/list/get"            // 获取订单列表
+	OrderGetApi                = "/channels/ec/order/get"                 // 获取订单详情
+	OrderSearchApi             = "/channels/ec/order/search"              // 搜索订单
 )
