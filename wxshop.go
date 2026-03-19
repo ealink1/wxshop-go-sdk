@@ -63,4 +63,23 @@ const (
 	OrderListGetApi            = "/channels/ec/order/list/get"            // 获取订单列表
 	OrderGetApi                = "/channels/ec/order/get"                 // 获取订单详情
 	OrderSearchApi             = "/channels/ec/order/search"              // 搜索订单
+
+	// 资金相关 API 接口路径
+	FundsGetBalanceApi         = "/channels/ec/funds/getbalance"         // 获取账户余额
+	FundsGetBankAcctApi        = "/channels/ec/funds/getbankacct"        // 获取结算账户
+	FundsGetFundsFlowDetailApi = "/channels/ec/funds/getfundsflowdetail" // 获取资金流水详情
+	FundsGetFundsFlowListApi   = "/channels/ec/funds/getfundsflowlist"   // 获取资金流水列表
+	FundsGetWithdrawListApi    = "/channels/ec/funds/getwithdrawlist"    // 获取提现记录列表
+	FundsListOrderFlowApi      = "/channels/ec/funds/listorderflow"      // 查询订单流水列表
+
+	// 电商罗盘相关 API 接口路径
+	CompassShopFinderAuthorizationListGetApi = "/channels/ec/compass/shop/finder/authorization/list/get" // 获取授权视频号列表
+	CompassShopFinderOverallGetApi           = "/channels/ec/compass/shop/finder/overall/get"            // 获取带货数据概览
+	CompassShopFinderProductListGetApi       = "/channels/ec/compass/shop/finder/product/list/get"       // 获取带货达人商品列表
+	CompassShopFinderProductOverallGetApi    = "/channels/ec/compass/shop/finder/product/overall/get"    // 获取带货达人详情
+	CompassShopLiveListGetApi                = "/channels/ec/compass/shop/live/list/get"                 // 获取店铺开播列表
+	CompassShopOverallGetApi                 = "/channels/ec/compass/shop/overall/get"                   // 获取电商数据概览
+	CompassShopProductDataGetApi             = "/channels/ec/compass/shop/product/data/get"              // 获取商品详细信息
+	CompassShopProductListGetApi             = "/channels/ec/compass/shop/product/list/get"              // 获取商品列表
+	CompassShopSaleProfileDataGetApi         = "/channels/ec/compass/shop/sale/profile/data/get"         // 获取店铺人群数据
 )

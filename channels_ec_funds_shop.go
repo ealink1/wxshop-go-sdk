@@ -10,16 +10,6 @@ import (
 	"net/url"
 )
 
-const (
-	// 资金相关 API 接口路径
-	FundsGetBalanceApi         = "/channels/ec/funds/getbalance"         // 获取账户余额
-	FundsGetBankAcctApi        = "/channels/ec/funds/getbankacct"        // 获取结算账户
-	FundsGetFundsFlowDetailApi = "/channels/ec/funds/getfundsflowdetail" // 获取资金流水详情
-	FundsGetFundsFlowListApi   = "/channels/ec/funds/getfundsflowlist"   // 获取资金流水列表
-	FundsGetWithdrawListApi    = "/channels/ec/funds/getwithdrawlist"    // 获取提现记录列表
-	FundsListOrderFlowApi      = "/channels/ec/funds/listorderflow"      // 查询订单流水列表
-)
-
 // GetFundsBalance 获取账户余额
 func (c *Client) GetFundsBalance(ctx context.Context) (*GetFundsBalanceResponse, error) {
 	if c.AccessToken == "" {

@@ -62,6 +62,7 @@ func main() {
 - `channels_ec_product_shop.go`: 商品管理查询类接口实现
 - `channels_ec_order_shop.go`: 订单管理查询类接口实现
 - `channels_ec_funds_shop.go`: 资金管理查询类接口实现
+- `channels_ec_compass_shop.go`: 电商罗盘查询类接口实现
 
 ## 接口列表
 
@@ -95,6 +96,15 @@ func main() {
 | `GetFundsFlowList` | `/channels/ec/funds/getfundsflowlist` | 获取资金流水列表 |
 | `GetFundsWithdrawList` | `/channels/ec/funds/getwithdrawlist` | 获取提现记录列表 |
 | `ListOrderFlow` | `/channels/ec/funds/listorderflow` | 查询订单流水列表 |
+| `GetCompassShopFinderAuthorizationList` | `/channels/ec/compass/shop/finder/authorization/list/get` | 获取授权视频号列表 |
+| `GetCompassShopFinderOverall` | `/channels/ec/compass/shop/finder/overall/get` | 获取带货数据概览 |
+| `GetCompassShopFinderProductList` | `/channels/ec/compass/shop/finder/product/list/get` | 获取带货达人商品列表 |
+| `GetCompassShopFinderProductOverall` | `/channels/ec/compass/shop/finder/product/overall/get` | 获取带货达人详情 |
+| `GetCompassShopLiveList` | `/channels/ec/compass/shop/live/list/get` | 获取店铺开播列表 |
+| `GetCompassShopOverall` | `/channels/ec/compass/shop/overall/get` | 获取电商数据概览 |
+| `GetCompassShopProductData` | `/channels/ec/compass/shop/product/data/get` | 获取商品详细信息 |
+| `GetCompassShopProductList` | `/channels/ec/compass/shop/product/list/get` | 获取商品列表 |
+| `GetCompassShopSaleProfileData` | `/channels/ec/compass/shop/sale/profile/data/get` | 获取店铺人群数据 |
 
 ## License
 
