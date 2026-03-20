@@ -1,7 +1,14 @@
 package wxshop_go_sdk
 
 const (
-	MsgTypeOrderNew = "channels_ec_order_new"
+	MsgTypeOrderNew          = "channels_ec_order_new"           // 新订单
+	MsgTypeOrderCancel       = "channels_ec_order_cancel"        // 取消订单
+	MsgTypeOrderPay          = "channels_ec_order_pay"           // 订单支付
+	MsgTypeOrderWaitShipping = "channels_ec_order_wait_shipping" // 等待发货
+	MsgTypeOrderDeliver      = "channels_ec_order_deliver"       // 订单发货
+	MsgTypeOrderConfirm      = "channels_ec_order_confirm"       // 订单确认
+	MsgTypeOrderSettle       = "channels_ec_order_settle"        // 订单结算
+	MsgTypeOrderWaitOrder    = "channels_ec_order_wait_order"    // 其他
 )
 
 type (
@@ -74,7 +81,9 @@ type (
 			SettleTime int64 `json:"settle_time"`
 		} `json:"order_info"`
 	}
-	MsgOrderWaitSettle struct {
+
+	// MsgOrderWaitOrder 订单消息 - 其他
+	MsgOrderWaitOrder struct {
 		MsgOrder
 		OrderInfo struct {
 			OrderId int64 `json:"order_id"`
