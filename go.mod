@@ -1,3 +1,3 @@
-module github.com/ealink1/wxshop_go_sdk
+module github.com/ealink1/wxshop-go-sdk
 
 go 1.25.5
