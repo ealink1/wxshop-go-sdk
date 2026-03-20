@@ -11,8 +11,8 @@
 ### 安装
 
 ```bash
-go get github.com/ealink1/wxshop_go_sdk
-go get -u github.com/ealink1/wxshop_go_sdk@latest
+go get github.com/ealink1/wxshop-go-sdk
+ go get github.com/ealink1/wxshop-go-sdk@latest
 ```
 
 > 注意：请根据实际仓库地址调整上述 import 路径。

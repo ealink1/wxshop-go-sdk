@@ -8,37 +8,51 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
-	"fmt"
+	"sort"
+	"strings"
 )
 
 // VerifyGet 绑定消息通知接口验证时候用
 func VerifyGet(timeStamp, nonce, token string) string {
-	mergeStr := fmt.Sprintf("%s%s%s", timeStamp, nonce, token)
-	// 1. 创建 SHA1 哈希对象
-	h := sha1.New()
-	// 2. 写入数据
-	// Write 方法永远不会返回错误，所以可以忽略返回值
-	h.Write([]byte(mergeStr))
-	// 3. 计算最终的和 (字节切片)
-	sum := h.Sum(nil)
+	//mergeStr := fmt.Sprintf("%s%s%s", timeStamp, nonce, token)
+	//// 1. 创建 SHA1 哈希对象
+	//h := sha1.New()
+	//// 2. 写入数据
+	//// Write 方法永远不会返回错误，所以可以忽略返回值
+	//h.Write([]byte(mergeStr))
+	//// 3. 计算最终的和 (字节切片)
+	//sum := h.Sum(nil)
+	//
+	//// 4. 将字节切片转换为十六进制字符串
+	//return hex.EncodeToString(sum)
 
-	// 4. 将字节切片转换为十六进制字符串
-	return hex.EncodeToString(sum)
+	parts := []string{timeStamp, nonce, token}
+	sort.Strings(parts)
+	merged := strings.Join(parts, "")
+	sum := sha1.Sum([]byte(merged))
+	return hex.EncodeToString(sum[:])
 }
 
 // VerifyPost 微信调用消息通知接口验证时候用
 func VerifyPost(timeStamp, nonce, token, encrypt string) string {
-	mergeStr := fmt.Sprintf("%s%s%s%s", encrypt, timeStamp, nonce, token)
-	// 1. 创建 SHA1 哈希对象
-	h := sha1.New()
-	// 2. 写入数据
-	// Write 方法永远不会返回错误，所以可以忽略返回值
-	h.Write([]byte(mergeStr))
-	// 3. 计算最终的和 (字节切片)
-	sum := h.Sum(nil)
+	//mergeStr := fmt.Sprintf("%s%s%s%s", encrypt, timeStamp, nonce, token)
+	//mergeStr := fmt.Sprintf("%s%s%s%s", encrypt, timeStamp, nonce, token)
+	//// 1. 创建 SHA1 哈希对象
+	//h := sha1.New()
+	//// 2. 写入数据
+	//// Write 方法永远不会返回错误，所以可以忽略返回值
+	//h.Write([]byte(mergeStr))
+	//// 3. 计算最终的和 (字节切片)
+	//sum := h.Sum(nil)
+	//
+	//// 4. 将字节切片转换为十六进制字符串
+	//return hex.EncodeToString(sum)
 
-	// 4. 将字节切片转换为十六进制字符串
-	return hex.EncodeToString(sum)
+	parts := []string{encrypt, timeStamp, nonce, token}
+	sort.Strings(parts)
+	merged := strings.Join(parts, "")
+	sum := sha1.Sum([]byte(merged))
+	return hex.EncodeToString(sum[:])
 }
 
 func DecryptMessage(encrypt, encodingAESKey string) (string, string, error) {
