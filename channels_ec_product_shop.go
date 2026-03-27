@@ -723,3 +723,51 @@ type ProductAuditStrategy struct {
 	HitDuplicatedFlag  int `json:"hit_duplicated_flag"`    // 相似品可上架开关
 	HitLowRiskRuleFlag int `json:"hit_low_risk_rule_flag"` // 低风险命中可上架开关
 }
+
+// 商品状态
+const (
+	ProductStatusInitial                     = 0  // 初始值
+	ProductStatusEditing                     = 1  // 编辑中
+	ProductStatusReviewing                   = 2  // 审核中
+	ProductStatusReviewFailed                = 3  // 审核失败
+	ProductStatusReviewSuccess               = 4  // 审核成功
+	ProductStatusListed                      = 5  // 上架
+	ProductStatusRecycleBin                  = 6  // 回收站
+	ProductStatusAsyncUploading              = 7  // 商品异步提交，上传中
+	ProductStatusAsyncUploadFailed           = 8  // 商品异步提交，上传失败
+	ProductStatusPermanentlyDeleted          = 9  // 彻底删除，商品无法再进行任何操作
+	ProductStatusFrozen                      = 10 // 冻结, 审核通过但是不能上架
+	ProductStatusSelfDelisted                = 11 // 自主下架
+	ProductStatusOutOfStockDelisted          = 12 // 售罄下架
+	ProductStatusViolationDelisted           = 13 // 违规下架/风控系统下架
+	ProductStatusInsufficientDepositDelisted = 14 // 保证金不足下架
+	ProductStatusBrandExpiredDelisted        = 15 // 品牌过期下架
+	ProductStatusBanned                      = 20 // 商品被封禁
+	ProductStatusSKULogicallyDeleted         = 21 // sku逻辑删除
+	ProductStatusNotExists                   = 30 // 商品不存在
+	ProductStatusQualityCheckFailed          = 71 // 质检不通过
+)
+
+// ProductStatusName 商品状态名称映射
+var ProductStatusName = map[int]string{
+	ProductStatusInitial:                     "初始值",
+	ProductStatusEditing:                     "编辑中",
+	ProductStatusReviewing:                   "审核中",
+	ProductStatusReviewFailed:                "审核失败",
+	ProductStatusReviewSuccess:               "审核成功",
+	ProductStatusListed:                      "上架",
+	ProductStatusRecycleBin:                  "回收站",
+	ProductStatusAsyncUploading:              "商品异步提交，上传中",
+	ProductStatusAsyncUploadFailed:           "商品异步提交，上传失败",
+	ProductStatusPermanentlyDeleted:          "彻底删除，商品无法再进行任何操作",
+	ProductStatusFrozen:                      "冻结, 审核通过但是不能上架",
+	ProductStatusSelfDelisted:                "自主下架",
+	ProductStatusOutOfStockDelisted:          "售罄下架",
+	ProductStatusViolationDelisted:           "违规下架/风控系统下架",
+	ProductStatusInsufficientDepositDelisted: "保证金不足下架",
+	ProductStatusBrandExpiredDelisted:        "品牌过期下架",
+	ProductStatusBanned:                      "商品被封禁",
+	ProductStatusSKULogicallyDeleted:         "sku逻辑删除",
+	ProductStatusNotExists:                   "商品不存在",
+	ProductStatusQualityCheckFailed:          "质检不通过",
+}
