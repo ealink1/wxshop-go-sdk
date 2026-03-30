@@ -260,7 +260,7 @@ type SearchOrderResponse struct {
 
 // OrderDetail 订单详情
 type OrderDetail struct {
-	OrderID             int64           `json:"order_id"`              // 订单 ID
+	OrderID             string          `json:"order_id"`              // 订单 ID
 	CreateTime          int64           `json:"create_time"`           // 创建时间，秒级时间戳
 	UpdateTime          int64           `json:"update_time"`           // 更新时间，秒级时间戳
 	Status              int             `json:"status"`                // 订单状态
@@ -325,8 +325,8 @@ type SourceInfo struct {
 
 // ProductInfo 商品信息
 type ProductInfo struct {
-	ProductID                               int64                    `json:"product_id"`                                  // 商品 id
-	SKUID                                   int64                    `json:"sku_id"`                                      // 商品 skuid
+	ProductID                               string                   `json:"product_id"`                                  // 商品 id
+	SKUID                                   string                   `json:"sku_id"`                                      // 商品 skuid
 	ThumbImg                                string                   `json:"thumb_img"`                                   // sku 小图
 	SalePrice                               int                      `json:"sale_price"`                                  // 售卖单价，单位为分
 	SKUCnt                                  int                      `json:"sku_cnt"`                                     // sku 数量
