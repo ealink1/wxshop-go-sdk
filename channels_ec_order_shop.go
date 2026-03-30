@@ -426,7 +426,7 @@ type PriceInfo struct {
 	Freight               int  `json:"freight"`                 // 运费，单位为分
 	OriginalOrderPrice    int  `json:"original_order_price"`    // 订单原价，单位为分
 	EstimateProductPrice  int  `json:"estimate_product_price"`  // 估价金额，单位为分
-	MerchantReceivePrice  int  `json:"merchant_receive_price"`  // 商家实收金额，单位为分
+	MerchantReceivePrice  int  `json:"merchant_receieve_price"` // 商家实收金额，单位为分
 	DiscountedPrice       int  `json:"discounted_price"`        // 商家优惠金额，单位为分
 	FinderDiscountedPrice int  `json:"finder_discounted_price"` // 达人优惠金额，单位为分
 	IsDiscounted          bool `json:"is_discounted"`           // 是否有优惠
