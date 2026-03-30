@@ -434,11 +434,13 @@ type DeliveryProductItemInfo struct {
 
 // ExtInfo 额外信息
 type ExtInfo struct {
-	CustomerNotes string `json:"customer_notes"` // 买家备注
-	MerchantNotes string `json:"merchant_notes"` // 商家备注
-	FinderID      string `json:"finder_id"`      // 视频号 ID
-	LiveID        string `json:"live_id"`        // 直播间 ID
-	OrderScene    int    `json:"order_scene"`    // 订单场景
+	CustomerNotes              string `json:"customer_notes"`               // 买家备注
+	MerchantNotes              string `json:"merchant_notes"`               // 商家备注
+	ConfirmReceiptTime         int64  `json:"confirm_receipt_time"`         // 确认收货时间，秒级时间戳
+	FinderID                   string `json:"finder_id"`                    // 视频号 ID
+	LiveID                     string `json:"live_id"`                      // 直播间 ID
+	OrderScene                 int    `json:"order_scene"`                  // 订单场景
+	CommissionHandlingProgress int    `json:"commission_handling_progress"` // 用于判断分佣单是否已生成【0：未生成 1:已生成】
 }
 
 // CouponInfo 优惠券信息
