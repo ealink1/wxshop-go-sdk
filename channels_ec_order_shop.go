@@ -22,6 +22,13 @@ const (
 	OrderStatusPendingReceive = 30  // 待收货（包括部分发货）
 	OrderStatusCompleted      = 100 // 完成
 	OrderStatusCancelled      = 250 // 订单取消（包括未付款取消，售后取消等）
+
+	OrderSceneOther                = 1 // 其他
+	OrderSceneLive                 = 2 // 直播间
+	OrderSceneShortVideo           = 3 // 短视频
+	OrderSceneGoodsShare           = 4 // 商品分享
+	OrderSceneGoodsCabinet         = 5 // 商品橱窗主页
+	OrderScenePublicAccountArticle = 6 // 公众号文章商品卡片
 )
 
 // ============================================================================
@@ -275,21 +282,45 @@ type OrderDetail struct {
 
 // OrderDetailInfo 订单详细数据信息
 type OrderDetailInfo struct {
-	ProductInfos     []ProductInfo   `json:"product_infos"`      // 商品列表
-	PayInfo          PayInfo         `json:"pay_info"`           // 支付信息
-	PriceInfo        PriceInfo       `json:"price_info"`         // 价格信息
-	DeliveryInfo     DeliveryInfo    `json:"delivery_info"`      // 配送信息
-	ExtInfo          ExtInfo         `json:"ext_info"`           // 额外信息
-	CouponInfo       CouponInfo      `json:"coupon_info"`        // 优惠券信息
-	CommissionInfos  []interface{}   `json:"commission_infos"`   // 分佣信息
-	SharerInfo       SharerInfo      `json:"sharer_info"`        // 分享员信息【已经下线】
-	SettleInfo       SettleInfo      `json:"settle_info"`        // 结算信息
-	SkuSharerInfos   []SkuSharerInfo `json:"sku_sharer_infos"`   // 分享员信息【已经下线】
-	AgentInfo        interface{}     `json:"agent_info"`         // 授权账号信息
-	SourceInfos      []interface{}   `json:"source_infos"`       // 订单来源信息
-	RefundInfo       interface{}     `json:"refund_info"`        // 订单退款信息
-	GreetingCardInfo interface{}     `json:"greeting_card_info"` // 需代写的商品贺卡信息
-	CustomInfo       interface{}     `json:"custom_info"`        // 商品定制信息
+	ProductInfos     []ProductInfo    `json:"product_infos"`      // 商品列表
+	PayInfo          PayInfo          `json:"pay_info"`           // 支付信息
+	PriceInfo        PriceInfo        `json:"price_info"`         // 价格信息
+	DeliveryInfo     DeliveryInfo     `json:"delivery_info"`      // 配送信息
+	ExtInfo          ExtInfo          `json:"ext_info"`           // 额外信息
+	CouponInfo       CouponInfo       `json:"coupon_info"`        // 优惠券信息
+	CommissionInfos  []CommissionInfo `json:"commission_infos"`   // 分佣信息
+	SharerInfo       SharerInfo       `json:"sharer_info"`        // 分享员信息【已经下线】
+	SettleInfo       SettleInfo       `json:"settle_info"`        // 结算信息
+	SkuSharerInfos   []SkuSharerInfo  `json:"sku_sharer_infos"`   // 分享员信息【已经下线】
+	AgentInfo        interface{}      `json:"agent_info"`         // 授权账号信息
+	SourceInfos      []SourceInfo     `json:"source_infos"`       // 订单来源信息
+	RefundInfo       interface{}      `json:"refund_info"`        // 订单退款信息
+	GreetingCardInfo interface{}      `json:"greeting_card_info"` // 需代写的商品贺卡信息
+	CustomInfo       interface{}      `json:"custom_info"`        // 商品定制信息
+}
+
+type CommissionInfo struct {
+	SkuId        string `json:"sku_id"`       // 商品skuid
+	Nickname     string `json:"nickname"`     // 分账方昵称
+	Type         int    `json:"type"`         // 分账方类型，0：达人【对应的可能为 finder_id，或者为 talent_id】，1：带货机构
+	Status       int    `json:"status"`       // 分账状态， 1：未结算，2：已结算
+	Amount       int    `json:"amount"`       // 分账金额
+	FinderId     string `json:"finder_id"`    // 达人视频号id
+	Openfinderid string `json:"openfinderid"` // 达人openfinderid
+	TalentId     string `json:"talent_id"`    // 新带货达人 id
+	AgencyId     string `json:"agency_id"`    // 带货机构 id
+}
+
+type SourceInfo struct {
+	SkuId                  string `json:"sku_id"`                    // 商品skuid
+	AccountType            int    `json:"account_type"`              // 带货账户类型，1：视频号，2：公众号，3：小程序，4：企业微信，5：带货达人，6：服务号
+	AccountId              string `json:"account_id"`                // 带货账户id，如果带货账户类型是视频号，此id为视频号id; 如果带货类型为 公众号/小程序， 此id 为对应 公众号/小程序 的appid
+	SaleChannel            int    `json:"sale_channel"`              // 销售渠道， 0：关联账号，1：合作账号，100：联盟达人带货，101：联盟带货机构推广
+	AccountNickname        string `json:"account_nickname"`          // 带货账户昵称
+	ContentType            int    `json:"content_type"`              // 带货内容类型，1：企微成员转发
+	ContentId              string `json:"content_id"`                // 带货内容id，取决于带货内容类型（企微成员user_id）
+	PromoterHeadSupplierId string `json:"promoter_head_supplier_id"` // 自营推客推广的带货机构id
+	OriginalId             string `json:"original_id"`               // 公众号/服务号 id，仅在account_type=2/6的情况下返回
 }
 
 // ProductInfo 商品信息
