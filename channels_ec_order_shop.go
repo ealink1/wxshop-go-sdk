@@ -258,7 +258,7 @@ type OrderDetail struct {
 	UpdateTime          int64           `json:"update_time"`           // 更新时间，秒级时间戳
 	Status              int             `json:"status"`                // 订单状态
 	OrderDetail         OrderDetailInfo `json:"order_detail"`          // 订单详细数据信息
-	AftersaleDetail     interface{}     `json:"aftersale_detail"`      // 售后信息
+	AftersaleDetail     AftersaleDetail `json:"aftersale_detail"`      // 售后信息
 	OpenID              string          `json:"openid"`                // 订单归属人身份标识
 	UnionID             string          `json:"unionid"`               // 订单归属人在开放平台的唯一标识符
 	IsPresent           bool            `json:"is_present"`            // 是否礼物订单
@@ -275,21 +275,21 @@ type OrderDetail struct {
 
 // OrderDetailInfo 订单详细数据信息
 type OrderDetailInfo struct {
-	ProductInfos     []ProductInfo `json:"product_infos"`      // 商品列表
-	PayInfo          interface{}   `json:"pay_info"`           // 支付信息
-	PriceInfo        interface{}   `json:"price_info"`         // 价格信息
-	DeliveryInfo     interface{}   `json:"delivery_info"`      // 配送信息
-	ExtInfo          interface{}   `json:"ext_info"`           // 额外信息
-	CouponInfo       interface{}   `json:"coupon_info"`        // 优惠券信息
-	CommissionInfos  []interface{} `json:"commission_infos"`   // 分佣信息
-	SharerInfo       interface{}   `json:"sharer_info"`        // 分享员信息【已经下线】
-	SettleInfo       interface{}   `json:"settle_info"`        // 结算信息
-	SkuSharerInfos   []interface{} `json:"sku_sharer_infos"`   // 分享员信息【已经下线】
-	AgentInfo        interface{}   `json:"agent_info"`         // 授权账号信息
-	SourceInfos      []interface{} `json:"source_infos"`       // 订单来源信息
-	RefundInfo       interface{}   `json:"refund_info"`        // 订单退款信息
-	GreetingCardInfo interface{}   `json:"greeting_card_info"` // 需代写的商品贺卡信息
-	CustomInfo       interface{}   `json:"custom_info"`        // 商品定制信息
+	ProductInfos     []ProductInfo   `json:"product_infos"`      // 商品列表
+	PayInfo          PayInfo         `json:"pay_info"`           // 支付信息
+	PriceInfo        PriceInfo       `json:"price_info"`         // 价格信息
+	DeliveryInfo     DeliveryInfo    `json:"delivery_info"`      // 配送信息
+	ExtInfo          ExtInfo         `json:"ext_info"`           // 额外信息
+	CouponInfo       CouponInfo      `json:"coupon_info"`        // 优惠券信息
+	CommissionInfos  []interface{}   `json:"commission_infos"`   // 分佣信息
+	SharerInfo       SharerInfo      `json:"sharer_info"`        // 分享员信息【已经下线】
+	SettleInfo       SettleInfo      `json:"settle_info"`        // 结算信息
+	SkuSharerInfos   []SkuSharerInfo `json:"sku_sharer_infos"`   // 分享员信息【已经下线】
+	AgentInfo        interface{}     `json:"agent_info"`         // 授权账号信息
+	SourceInfos      []interface{}   `json:"source_infos"`       // 订单来源信息
+	RefundInfo       interface{}     `json:"refund_info"`        // 订单退款信息
+	GreetingCardInfo interface{}     `json:"greeting_card_info"` // 需代写的商品贺卡信息
+	CustomInfo       interface{}     `json:"custom_info"`        // 商品定制信息
 }
 
 // ProductInfo 商品信息
@@ -361,4 +361,111 @@ type OrderProductCouponInfo struct {
 	CouponType      int    `json:"coupon_type"`      // 优惠券类型
 	DiscountedPrice int    `json:"discounted_price"` // 优惠金额，单位为分
 	CouponID        string `json:"coupon_id"`        // 优惠券 id
+}
+
+// ============================================================================
+// 订单详情子结构体
+// ============================================================================
+
+// AftersaleDetail 售后信息
+type AftersaleDetail struct {
+	AftersaleOrderList  []AftersaleOrder `json:"aftersale_order_list"`   // 售后单列表
+	OnAftersaleOrderCnt int              `json:"on_aftersale_order_cnt"` // 正在售后中的售后单数量
+}
+
+// AftersaleOrder 售后单
+type AftersaleOrder struct {
+	AftersaleOrderID string `json:"aftersale_order_id"` // 售后单 ID
+	Status           int    `json:"status"`             // 售后单状态
+}
+
+// PayInfo 支付信息
+type PayInfo struct {
+	PrepayID      string `json:"prepay_id"`      // 预支付 ID
+	TransactionID string `json:"transaction_id"` // 交易 ID
+	PrepayTime    int64  `json:"prepay_time"`    // 预支付时间，秒级时间戳
+	PayTime       int64  `json:"pay_time"`       // 支付时间，秒级时间戳
+	PaymentMethod int    `json:"payment_method"` // 支付方式
+}
+
+// PriceInfo 价格信息
+type PriceInfo struct {
+	ProductPrice    int  `json:"product_price"`    // 商品总价，单位为分
+	OrderPrice      int  `json:"order_price"`      // 订单总价，单位为分
+	Freight         int  `json:"freight"`          // 运费，单位为分
+	DiscountedPrice int  `json:"discounted_price"` // 优惠金额，单位为分
+	IsDiscounted    bool `json:"is_discounted"`    // 是否有优惠
+}
+
+// DeliveryInfo 配送信息
+type DeliveryInfo struct {
+	AddressInfo         AddressInfo           `json:"address_info"`          // 地址信息
+	DeliveryProductInfo []DeliveryProductInfo `json:"delivery_product_info"` // 配送商品信息
+	ShipDoneTime        int64                 `json:"ship_done_time"`        // 发货完成时间，秒级时间戳
+	DeliverMethod       int                   `json:"deliver_method"`        // 配送方式
+}
+
+// AddressInfo 地址信息
+type AddressInfo struct {
+	UserName     string `json:"user_name"`     // 收件人姓名
+	PostalCode   string `json:"postal_code"`   // 邮政编码
+	ProvinceName string `json:"province_name"` // 省份
+	CityName     string `json:"city_name"`     // 城市
+	CountyName   string `json:"county_name"`   // 区县
+	DetailInfo   string `json:"detail_info"`   // 详细地址
+	TelNumber    string `json:"tel_number"`    // 联系电话
+}
+
+// DeliveryProductInfo 配送商品信息
+type DeliveryProductInfo struct {
+	WaybillID    string                    `json:"waybill_id"`    // 运单 ID
+	DeliveryID   string                    `json:"delivery_id"`   // 物流公司 ID
+	DeliveryTime int64                     `json:"delivery_time"` // 发货时间，秒级时间戳
+	DeliverType  int                       `json:"deliver_type"`  // 发货类型
+	ProductInfos []DeliveryProductItemInfo `json:"product_infos"` // 商品信息
+}
+
+// DeliveryProductItemInfo 配送商品信息项
+type DeliveryProductItemInfo struct {
+	ProductID  string `json:"product_id"`  // 商品 ID
+	SKUID      string `json:"sku_id"`      // SKU ID
+	ProductCnt int    `json:"product_cnt"` // 商品数量
+}
+
+// ExtInfo 额外信息
+type ExtInfo struct {
+	CustomerNotes string `json:"customer_notes"` // 买家备注
+	MerchantNotes string `json:"merchant_notes"` // 商家备注
+	FinderID      string `json:"finder_id"`      // 视频号 ID
+	LiveID        string `json:"live_id"`        // 直播间 ID
+	OrderScene    int    `json:"order_scene"`    // 订单场景
+}
+
+// CouponInfo 优惠券信息
+type CouponInfo struct {
+	UserCouponID string `json:"user_coupon_id"` // 用户优惠券 ID
+}
+
+// SharerInfo 分享员信息
+type SharerInfo struct {
+	SharerOpenid     string `json:"sharer_openid"`     // 分享者 openid
+	SharerUnionid    string `json:"sharer_unionid"`    // 分享者 unionid
+	SharerType       int    `json:"sharer_type"`       // 分享者类型
+	ShareScene       int    `json:"share_scene"`       // 分享场景
+	HandlingProgress int    `json:"handling_progress"` // 处理进度
+}
+
+// SettleInfo 结算信息
+type SettleInfo struct {
+	CommissionFee        int `json:"commission_fee"`         // 佣金，单位为分
+	PredictCommissionFee int `json:"predict_commission_fee"` // 预估佣金，单位为分
+}
+
+// SkuSharerInfo SKU 分享员信息
+type SkuSharerInfo struct {
+	SharerOpenid  string `json:"sharer_openid"`  // 分享者 openid
+	SharerUnionid string `json:"sharer_unionid"` // 分享者 unionid
+	SharerType    int    `json:"sharer_type"`    // 分享者类型
+	ShareScene    int    `json:"share_scene"`    // 分享场景
+	SKUID         string `json:"sku_id"`         // SKU ID
 }
