@@ -21,6 +21,7 @@ const (
 	OrderStatusPartialShipped = 21  // 部分发货
 	OrderStatusPendingReceive = 30  // 待收货（包括部分发货）
 	OrderStatusCompleted      = 100 // 完成
+	OrderStatusReturned       = 200 // 全部商品售后之后，订单取消
 	OrderStatusCancelled      = 250 // 订单取消（包括未付款取消，售后取消等）
 
 	OrderSceneOther                = 1 // 其他
